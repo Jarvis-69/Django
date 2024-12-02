@@ -2,16 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
+    <style>
+        /* Style général de la page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px 0;
+            background-color: #3498db;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        /* Conteneur principal du formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style des champs du formulaire */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form input, form textarea, form button {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        /* Style spécifique pour les textarea */
+        form textarea {
+            height: 200px;
+            resize: vertical;
+        }
+
+        /* Bouton de soumission */
+        form button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Style des champs avec erreurs */
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: -10px;
+        }
+    </style>
 </head>
 <body>
+
     <h1>Create a New Post</h1>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Affiche le formulaire avec chaque champ sur une nouvelle ligne -->
-        <button type="submit">Create Post</button>
-    </form>
+    <!-- Formulaire de création d'article -->
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Affiche le formulaire avec chaque champ sur une nouvelle ligne -->
+
+            <!-- Ajouter un message d'erreur si nécessaire -->
+            {% if form.errors %}
+                <div class="error">
+                    <p>There were errors in your form. Please fix them and try again.</p>
+                </div>
+            {% endif %}
+
+            <!-- Bouton pour soumettre -->
+            <button type="submit">Create Post</button>
+        </form>
+    </div>
 
 </body>
 </html>

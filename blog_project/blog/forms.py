@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'slug', 'content', 'status', 'category', 'image', 'author']
+        fields = ['title', 'content', 'status', 'category', 'image', 'author']
 
     # Champ catégorie (comme avant)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)

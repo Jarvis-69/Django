@@ -2,11 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post List</title>
+    <style>
+        /* Style général de la page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px 0;
+            background-color: #3498db;
+            margin: 0;
+        }
+
+        /* Conteneur des posts */
+        .post {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover effect sur chaque post */
+        .post:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .post h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .post p {
+            font-size: 16px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Image dans chaque post */
+        .post img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        /* Liste des articles */
+        ul {
+            padding: 0;
+            list-style-type: none;
+            margin: 0;
+        }
+
+        /* Style du bouton pour créer un nouvel article */
+        .create-post-btn {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            margin: 20px auto;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-post-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
     <h1>Post List</h1>
 
+    <!-- Bouton pour créer un nouvel article -->
+    <a href="{% url 'create_post' %}" class="create-post-btn">
+        Create New Post
+    </a>
+    
     <!-- Liste des articles -->
     <ul>
         {% for post in posts %}
@@ -17,13 +104,7 @@
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
         </div>
-    {% endfor %}    
-    </ul>
-
-    <!-- Bouton pour créer un nouvel article -->
-    <a href="{% url 'create_post' %}">
-        <button>Create New Post</button>
-    </a>
-    
+        {% endfor %}
+    </ul>    
 </body>
-</html> 
+</html>
