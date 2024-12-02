@@ -11,6 +11,12 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+            box-sizing: border-box; /* Ajout pour inclure padding et bordure dans la taille des éléments */
+        }
+
+        /* Pour tous les éléments, appliquer box-sizing border-box */
+        * {
+            box-sizing: border-box; /* Assure que le padding et la bordure sont inclus dans la largeur totale */
         }
 
         h1 {
@@ -45,6 +51,7 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             width: 100%;
+            box-sizing: border-box; /* Ajout de box-sizing pour éviter les dépassements */
         }
 
         /* Style spécifique pour les textarea */
@@ -72,11 +79,41 @@
             font-size: 14px;
             margin-top: -10px;
         }
+
+        /* Style du bouton de retour */
+        .back-button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Enlever le texte souligné sur les liens */
+        a {
+            text-decoration: none; /* Enlève le soulignement */
+        }
     </style>
 </head>
 <body>
 
     <h1>Create a New Post</h1>
+
+    <!-- Bouton de retour à la liste des posts -->
+    <a href="{% url 'post_list' %}">
+        <button class="back-button">Back to Post List</button>
+    </a>
 
     <!-- Formulaire de création d'article -->
     <div class="form-container">
@@ -94,6 +131,7 @@
             <!-- Bouton pour soumettre -->
             <button type="submit">Create Post</button>
         </form>
+        
     </div>
 
 </body>
