@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post List</title>
+</head>
+<body>
+    <h1>Post List</h1>
+
+    <!-- Liste des articles -->
+    <ul>
+        {% for post in posts %}
+        <div class="post">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+        </div>
+    {% endfor %}    
+    </ul>
+
+    <!-- Bouton pour créer un nouvel article -->
+    <a href="{% url 'create_post' %}">
+        <button>Create New Post</button>
+    </a>
+    
+</body>
+</html> 
