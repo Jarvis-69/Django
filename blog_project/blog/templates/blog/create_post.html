@@ -6,7 +6,7 @@
     <title>Create Post</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
@@ -19,7 +19,7 @@
 
         h1 {
             text-align: center;
-            color: #333;
+            color: white;
             padding: 20px 0;
             background-color: #3498db;
             margin: 0;
@@ -35,7 +35,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            /* gap: 20px; */
         }
 
         .navbar a {
@@ -120,6 +120,21 @@
         a {
             text-decoration: none;
         }
+
+        /* Style pour le bouton de connexion/déconnexion */
+        .navbar .auth-links a {
+            font-size: 16px;
+            background-color: #2ecc71;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .auth-links a:hover {
+            background-color: #27ae60;
+        }
     </style>
 </head>
 <body>
@@ -127,12 +142,13 @@
     <div class="navbar">
         <h1>Créer une nouvelle publication</h1>
         <a href="{% url 'post_list' %}">Accueil</a>
-    
-        {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}" style="position: absolute; right: 50px;">Déconnexion</a>  <!-- Lien de déconnexion -->
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>  <!-- Lien de connexion -->
-        {% endif %}
+        <div class="auth-links" style="position: absolute; right: 50px;">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Déconnexion</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
     </div>
 
     <!-- Formulaire de création de post -->

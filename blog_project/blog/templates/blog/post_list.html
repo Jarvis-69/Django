@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post List</title>
+    <title>Liste des Publications</title>
     <style>
         /* Style général de la page */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
             margin: 0;
             padding: 0;
+            /* color: #333; */
         }
 
         /* Barre de navigation */
         .navbar {
             background-color: #3498db;
-            padding: 20px;
+            /* padding: 20px 50px; */
             text-align: center;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 20px;
+            color: white;
         }
 
         .navbar a {
@@ -31,23 +32,22 @@
             font-size: 18px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            display: inline-block;
         }
 
         .navbar a:hover {
             background-color: #2980b9;
         }
 
-        /* Titre de la page */
-        h1 {
-            text-align: center;
-            color: #333;
-            padding: 20px 0;
-            background-color: #3498db;
-            margin: 0;
+        .navbar h1 {
             font-size: 28px;
-            position: absolute;
-            left: 50px;
+        }
+
+        /* Titre de la page */
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 20px;
+            font-size: 24px;
         }
 
         /* Conteneur des posts */
@@ -105,8 +105,8 @@
         /* Style du bouton pour créer un nouvel article */
         .create-post-btn {
             display: block;
-            width: 200px;
-            padding: 10px;
+            width: 300px;
+            padding: 12px;
             background-color: #3498db;
             color: white;
             text-align: center;
@@ -114,29 +114,26 @@
             border-radius: 8px;
             text-decoration: none;
             transition: background-color 0.3s ease;
+            margin: 20px auto;
         }
 
         .create-post-btn:hover {
             background-color: #2980b9;
         }
 
-        a {
-            text-decoration: none;
-        }
-
-        /* Style général des boutons */
+        /* Style des boutons de modification et suppression */
         .action-buttons {
             margin-top: 20px;
+            display: flex;
+            gap: 15px;
         }
 
         .action-buttons .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
+            padding: 8px 16px; /* Boutons plus petits */
+            font-size: 14px;  /* Taille de police réduite */
+            border-radius: 8px;
             text-align: center;
             text-decoration: none;
-            margin-right: 10px;
             transition: all 0.3s ease;
         }
 
@@ -157,21 +154,39 @@
         .action-buttons .btn-delete:hover {
             background-color: #c0392b;
         }
+
+        /* Style pour le bouton de connexion/déconnexion */
+        .navbar .auth-links a {
+            font-size: 16px;
+            background-color: #2ecc71;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .auth-links a:hover {
+            background-color: #27ae60;
+        }
     </style>
 </head>
 <body>
+
     <!-- Barre de navigation -->
     <div class="navbar">
-        <h1>Toutes les publications</h1>
+        <h1 style="position: absolute; left: 50px;">Toutes les publications</h1>
         <a href="{% url 'create_post' %}" class="create-post-btn">Créer une nouvelle publication</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}" style="position: absolute; right: 50px;">Déconnexion</a>  <!-- Lien de déconnexion -->
-        {% else %}
-            <a href="{% url 'login' %}" style="position: absolute; right: 50px;">Connexion</a>  <!-- Lien de connexion -->
-        {% endif %}
-    </div>    
+        <div class="auth-links" style="position: absolute; right: 50px;">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Déconnexion</a>  <!-- Lien de déconnexion -->
+            {% else %}
+                <a href="{% url 'login' %}">Connexion</a>  <!-- Lien de connexion -->
+            {% endif %}
+        </div>
+    </div>
 
-    <H2 style="text-align: center;">Bonjour, {{ user.username }}</H2>  <!-- Affichage du nom de l'utilisateur -->
+    <h1 style="text-align: center;">Bonjour, {{ user.username }}</h1>  <!-- Affichage du nom de l'utilisateur -->
 
     {% load custom_filters %}
 
@@ -181,21 +196,21 @@
         <div class="post">
             <h2>{{ post.title }}</h2>
             <p>{{ post.content }}</p>
-            <p><strong>Auteur:</strong> {{ post.author.username }}</p>
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
-            <p>Publié le {{ post.created_at|date:"d M Y, à H:m" }}</p>
+            <p><strong>Auteur:</strong> {{ post.author.username }}</p>
+            <p class="date">Publié le {{ post.created_at|date:"d M Y, à H:m" }}</p>
             
             <!-- Boutons de modification et suppression -->
             {% if user|is_admin or user == post.author %}
                 <div class="action-buttons">
                     <a href="{% url 'edit_post' post.id %}" class="btn btn-edit">Modifier</a>
-                    <a href="{% url 'delete_post' post.id %}" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce post ?')">Supprimer</a>
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-delete">Supprimer</a>
                 </div>
             {% endif %}
         </div>
         {% endfor %}
-    </ul>    
+    </ul>
 </body>
 </html>
