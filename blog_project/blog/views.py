@@ -1,19 +1,41 @@
 # blog/views.py
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post
+from .models import Post, Category
 from .forms import PostForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 def post_list(request):
     # Récupérer tous les posts, en filtrant pour ceux qui sont publiés
     posts = Post.objects.all().order_by('-created_at')
     is_admin = request.user.groups.filter(name="Administrateurs").exists()
 
+     # Filtrer par catégorie
+    category_filter = request.GET.get('category')  # Récupérer la catégorie depuis les paramètres GET
+    if category_filter:
+        posts = posts.filter(category__name=category_filter)
+
+    # Filtrer par utilisateur
+    user_filter = request.GET.get('user')  # Récupérer l'utilisateur depuis les paramètres GET
+    if user_filter:
+        posts = posts.filter(author__username=user_filter)
+
+    categories = Category.objects.all()  # Récupérer toutes les catégories
+    users = User.objects.all()  # Récupérer tous les utilisateurs (ou personnaliser selon vos besoins)
+
+    context = {
+        'posts': posts,
+        'categories': categories,
+        'users': users,
+        'user': request.user,
+        'is_admin': is_admin
+    }
+
     # Retourner un rendu de la template 'post_list.html', en passant les posts
-    return render(request, 'blog/post_list.html', {'posts': posts, 'user': request.user, 'is_admin': is_admin})
+    return render(request, 'blog/post_list.html', context)
 
 @login_required  # Assure que l'utilisateur soit connecté avant de pouvoir créer un post
 def create_post(request):
