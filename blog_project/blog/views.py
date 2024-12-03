@@ -5,23 +5,27 @@ from .forms import PostForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def post_list(request):
     # Récupérer tous les posts, en filtrant pour ceux qui sont publiés
-    posts = Post.objects.filter(status='published').order_by('-created_at')
+    posts = Post.objects.all().order_by('-created_at')
 
     # Retourner un rendu de la template 'post_list.html', en passant les posts
     return render(request, 'blog/post_list.html', {'posts': posts, 'user': request.user})
 
+@login_required  # Assure que l'utilisateur soit connecté avant de pouvoir créer un post
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save()  # Sauvegarde directement avec l'auteur sélectionné
-            return redirect('post_list')  # Redirige vers la liste des articles
+            post = form.save(commit=False)  # Ne pas sauvegarder immédiatement
+            post.author = request.user  # Associer l'utilisateur connecté comme auteur
+            post.save()  # Sauvegarder l'article
+            return redirect('post_list')  # Rediriger vers la liste des posts après la création
     else:
         form = PostForm()
-
+    
     return render(request, 'blog/create_post.html', {'form': form})
 
 def edit_post(request, pk):

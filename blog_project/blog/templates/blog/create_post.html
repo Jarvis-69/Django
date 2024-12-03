@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
     <style>
-        /* Style général de la page */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -14,7 +13,6 @@
             box-sizing: border-box;
         }
 
-        /* Pour tous les éléments, appliquer box-sizing border-box */
         * {
             box-sizing: border-box;
         }
@@ -30,7 +28,6 @@
             left: 50px;
         }
 
-        /* Barre de navigation */
         .navbar {
             background-color: #3498db;
             padding: 20px;
@@ -48,14 +45,12 @@
             font-size: 18px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            display: inline-block;
         }
 
         .navbar a:hover {
             background-color: #2980b9;
         }
 
-        /* Conteneur principal du formulaire */
         .form-container {
             max-width: 800px;
             margin: 30px auto;
@@ -65,7 +60,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Style des champs du formulaire */
         form {
             display: flex;
             flex-direction: column;
@@ -81,13 +75,11 @@
             box-sizing: border-box;
         }
 
-        /* Style spécifique pour les textarea */
         form textarea {
             height: 200px;
             resize: vertical;
         }
 
-        /* Bouton de soumission */
         form button {
             background-color: #3498db;
             color: white;
@@ -100,14 +92,12 @@
             background-color: #2980b9;
         }
 
-        /* Style des champs avec erreurs */
         .error {
             color: red;
             font-size: 14px;
             margin-top: -10px;
         }
 
-        /* Style du bouton de retour */
         .back-button {
             background-color: #3498db;
             color: white;
@@ -127,7 +117,6 @@
             background-color: #2980b9;
         }
 
-        /* Enlever le texte souligné sur les liens */
         a {
             text-decoration: none;
         }
@@ -136,26 +125,29 @@
 <body>
     <!-- Barre de navigation -->
     <div class="navbar">
-        <h1>Create a New Post</h1>
-        <a href="{% url 'post_list' %}">Home</a>
-        <a href="{% url 'create_post' %}">Create New Post</a>
+        <h1>Créer une nouvelle publication</h1>
+        <a href="{% url 'post_list' %}">Accueil</a>
+    
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" style="position: absolute; right: 50px;">Déconnexion</a>  <!-- Lien de déconnexion -->
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>  <!-- Lien de connexion -->
+        {% endif %}
     </div>
 
-    <!-- Formulaire de création d'article -->
+    <!-- Formulaire de création de post -->
     <div class="form-container">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Affiche le formulaire avec chaque champ sur une nouvelle ligne -->
+            {{ form.as_p }}
 
-            <!-- Ajouter un message d'erreur si nécessaire -->
             {% if form.errors %}
                 <div class="error">
                     <p>There were errors in your form. Please fix them and try again.</p>
                 </div>
             {% endif %}
 
-            <!-- Bouton pour soumettre -->
-            <button type="submit">Create Post</button>
+            <button type="submit">Créer la publication</button>
         </form>
     </div>
 </body>

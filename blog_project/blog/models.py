@@ -19,33 +19,16 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:category_detail', args=[self.slug])
-    
-
-class Author(models.Model):
-    name = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)  # Date de création de l'auteur
-
-    def __str__(self):
-        return self.name
-
 
 class Post(models.Model):    
-    STATUS_CHOICES = (        
-        ('draft', 'Draft'),        
-        ('published', 'Published')    
-    )    
-    
     title = models.CharField(max_length=200)    
     slug = models.SlugField(unique=True, blank=True)    
     content = models.TextField()     
     updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(default=timezone.now)  # Valeur par défaut pour les nouveaux posts
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')    
+    created_at = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    # author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')    
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')    
     image = models.ImageField(upload_to='blog_images/%Y/%m/%d/', blank=True)  
-    # tags = models.ManyToManyField('Tag', blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Si le slug n'est pas déjà défini
