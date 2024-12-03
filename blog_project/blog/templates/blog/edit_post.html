@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Post</title>
+    <title>Edit Post</title>
     <style>
         /* Style général de la page */
         body {
@@ -11,12 +11,12 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Assure que le padding et la bordure sont inclus dans la taille des éléments */
         }
 
         /* Pour tous les éléments, appliquer box-sizing border-box */
         * {
-            box-sizing: border-box;
+            box-sizing: border-box; /* Assure que le padding et la bordure sont inclus dans la largeur totale */
         }
 
         h1 {
@@ -26,33 +26,6 @@
             background-color: #3498db;
             margin: 0;
             font-size: 28px;
-            position: absolute;
-            left: 50px;
-        }
-
-        /* Barre de navigation */
-        .navbar {
-            background-color: #3498db;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            display: inline-block;
-        }
-
-        .navbar a:hover {
-            background-color: #2980b9;
         }
 
         /* Conteneur principal du formulaire */
@@ -78,7 +51,7 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             width: 100%;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Ajout de box-sizing pour éviter les dépassements */
         }
 
         /* Style spécifique pour les textarea */
@@ -129,23 +102,26 @@
 
         /* Enlever le texte souligné sur les liens */
         a {
-            text-decoration: none;
+            text-decoration: none; /* Enlève le soulignement */
         }
     </style>
 </head>
 <body>
-    <!-- Barre de navigation -->
-    <div class="navbar">
-        <h1>Create a New Post</h1>
-        <a href="{% url 'post_list' %}">Home</a>
-        <a href="{% url 'create_post' %}">Create New Post</a>
-    </div>
 
-    <!-- Formulaire de création d'article -->
+    <h1>Edit Post</h1>
+
+    <!-- Bouton de retour à la liste des posts -->
+    <a href="{% url 'post_list' %}">
+        <button class="back-button">Back to Post List</button>
+    </a>
+
+    <!-- Formulaire de modification d'article -->
     <div class="form-container">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Affiche le formulaire avec chaque champ sur une nouvelle ligne -->
+            
+            <!-- Affiche le formulaire de modification -->
+            {{ form.as_p }}
 
             <!-- Ajouter un message d'erreur si nécessaire -->
             {% if form.errors %}
@@ -155,7 +131,7 @@
             {% endif %}
 
             <!-- Bouton pour soumettre -->
-            <button type="submit">Create Post</button>
+            <button type="submit">Save Changes</button>
         </form>
     </div>
 </body>

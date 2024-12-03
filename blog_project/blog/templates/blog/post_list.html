@@ -13,13 +13,43 @@
             padding: 0;
         }
 
+        /* Barre de navigation */
+        .navbar {
+            background-color: #3498db;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #2980b9;
+        }
+
+        /* Titre de la page */
         h1 {
             text-align: center;
             color: #333;
             padding: 20px 0;
             background-color: #3498db;
             margin: 0;
+            font-size: 28px;
+            position: absolute;
+            left: 50px;
         }
+
 
         /* Conteneur des posts */
         .post {
@@ -59,6 +89,13 @@
             border-radius: 8px;
         }
 
+        /* Date de publication */
+        .post .date {
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+        }
+
         /* Liste des articles */
         ul {
             padding: 0;
@@ -75,7 +112,7 @@
             color: white;
             text-align: center;
             font-size: 16px;
-            margin: 20px auto;
+            /* margin: 20px auto; */
             border-radius: 8px;
             text-decoration: none;
             transition: background-color 0.3s ease;
@@ -84,16 +121,17 @@
         .create-post-btn:hover {
             background-color: #2980b9;
         }
+
     </style>
 </head>
 <body>
-    <h1>Post List</h1>
+    <!-- Barre de navigation -->
+    <div class="navbar">
+        <h1>Post List</h1>
+        <a href="{% url 'post_list' %}">Home</a>
+        <a href="{% url 'create_post' %}" class="create-post-btn">Create New Post</a>
+    </div>
 
-    <!-- Bouton pour créer un nouvel article -->
-    <a href="{% url 'create_post' %}" class="create-post-btn">
-        Create New Post
-    </a>
-    
     <!-- Liste des articles -->
     <ul>
         {% for post in posts %}
@@ -102,6 +140,12 @@
             <p>{{ post.content }}</p>
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+            
+            <!-- Afficher les boutons de modification et suppression seulement si l'utilisateur est l'auteur -->
+            {% if post.author == user %}
+                <a href="{% url 'edit_post' post.id %}">Edit</a>
+                <a href="{% url 'delete_post' post.id %}">Delete</a>
             {% endif %}
         </div>
         {% endfor %}
