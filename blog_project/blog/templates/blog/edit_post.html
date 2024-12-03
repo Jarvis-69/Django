@@ -135,7 +135,7 @@
 <body>
     <!-- Navbar -->
     <div class="navbar">
-        <h1>Edit Post</h1>
+        <h1>Modification de publication</h1>
         <a href="{% url 'post_list' %}">Accueil</a>
     
         {% if user.is_authenticated %}
@@ -144,7 +144,7 @@
             <a href="{% url 'login' %}">Login</a>  <!-- Lien de connexion -->
         {% endif %}
     </div>
-    
+
     <!-- Formulaire de modification d'article -->
     <div class="form-container">
         <form method="POST" enctype="multipart/form-data">
@@ -161,7 +161,7 @@
             {% endif %}
 
             <!-- Bouton pour soumettre -->
-            <button type="submit">Save Changes</button>
+            <button type="submit">Savegarder les modifications</button>
         </form>
     </div>
 </body>
