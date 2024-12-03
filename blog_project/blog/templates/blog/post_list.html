@@ -126,18 +126,18 @@
     <!-- Barre de navigation -->
     <div class="navbar">
         <h1>Post List</h1>
-        <a href="{% url 'post_list' %}">Home</a>
-        <a href="{% url 'create_post' %}" class="create-post-btn">Create New Post</a>
-
-        <!-- Vérifier si l'utilisateur est connecté -->
+        <a href="{% url 'post_list' %}">Accueil
+        </a>
+        <a href="{% url 'create_post' %}" class="create-post-btn">Créer un nouveau poste</a>
+    
         {% if user.is_authenticated %}
-            <!-- Si l'utilisateur est connecté, afficher un bouton de déconnexion -->
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'logout' %}">Déconnexion</a>  <!-- Lien de déconnexion -->
         {% else %}
-            <!-- Si l'utilisateur n'est pas connecté, afficher un lien vers la page de connexion -->
-            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'login' %}">Connexion</a>  <!-- Lien de connexion -->
         {% endif %}
-    </div>
+    </div>    
+
+    <H2 style="text-align: center;">Bonjour, {{ user.username }}</H2>  <!-- Affichage du nom de l'utilisateur -->
 
     <!-- Liste des articles -->
     <ul>
@@ -145,10 +145,11 @@
         <div class="post">
             <h2>{{ post.title }}</h2>
             <p>{{ post.content }}</p>
+            <p><strong>Author:</strong> {{ post.author.username }}</p>  <!-- Affichage de l'auteur -->
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
-            <p>Publié le {{ post.created_at|date:"d M Y" }}</p>
+            <p>Publié le {{ post.created_at|date:"d M Y, à H:m" }}</p>
             
             <!-- Afficher les boutons de modification et suppression seulement si l'utilisateur est l'auteur -->
             {% if post.author == user %}
@@ -156,7 +157,7 @@
                 <a href="{% url 'delete_post' post.id %}">Delete</a>
             {% endif %}
         </div>
-        {% endfor %}
+        {% endfor %}        
     </ul>    
 </body>
 </html>

@@ -11,7 +11,7 @@ def post_list(request):
     posts = Post.objects.filter(status='published').order_by('-created_at')
 
     # Retourner un rendu de la template 'post_list.html', en passant les posts
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    return render(request, 'blog/post_list.html', {'posts': posts, 'user': request.user})
 
 def create_post(request):
     if request.method == 'POST':
@@ -24,31 +24,28 @@ def create_post(request):
 
     return render(request, 'blog/create_post.html', {'form': form})
 
-def edit_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-
-    # Vérifier si l'utilisateur connecté est l'auteur du post
-    if post.author != request.user:
-        return redirect('post_list')  # Redirige vers la liste des posts si l'utilisateur n'est pas l'auteur
-
+def edit_post(request, pk):
+    # Récupérer le post avec le pk passé dans l'URL
+    post = get_object_or_404(Post, pk=pk)
+    
+    # Si la méthode est POST, on veut mettre à jour le post
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            form.save()
-            return redirect('post_detail', post_id=post.id)  # Redirige vers la page de détails du post
+            form.save()  # Sauvegarde le post modifié
+            return redirect('post_list')  # Redirection vers la liste des posts
     else:
-        form = PostForm(instance=post)
-    
-    return render(request, 'edit_post.html', {'form': form, 'post': post})
+        form = PostForm(instance=post)  # Si c'est un GET, afficher le formulaire pré-rempli avec les données actuelles du post
+
+    return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
 
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         post.delete()
-        return redirect('post_list')  # Rediriger après suppression
-
-    return render(request, 'confirm_delete.html', {'post': post})
+        return redirect('post_list')  # Redirige vers la liste des posts après la suppression
+    return render(request, 'blog/confirm_delete.html', {'post': post})
 
 def login_view(request):
     if request.method == 'POST':
