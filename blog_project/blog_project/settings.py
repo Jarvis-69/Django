@@ -43,9 +43,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',  # Tu peux ajouter ce dossier global pour les templates si tu veux
+            BASE_DIR / 'templates',  # Si tu as un dossier templates à la racine du projet
+            BASE_DIR / 'blog' / 'templates',  # Si tes templates sont dans le répertoire blog
         ],
-        'APP_DIRS': True,  # Cela permet à Django de chercher des templates dans chaque application (comme blog)
+        'APP_DIRS': True,  # Pour rechercher les templates dans les répertoires 'templates' de chaque app
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

@@ -50,7 +50,6 @@
             left: 50px;
         }
 
-
         /* Conteneur des posts */
         .post {
             background-color: white;
@@ -112,7 +111,6 @@
             color: white;
             text-align: center;
             font-size: 16px;
-            /* margin: 20px auto; */
             border-radius: 8px;
             text-decoration: none;
             transition: background-color 0.3s ease;
@@ -130,6 +128,15 @@
         <h1>Post List</h1>
         <a href="{% url 'post_list' %}">Home</a>
         <a href="{% url 'create_post' %}" class="create-post-btn">Create New Post</a>
+
+        <!-- Vérifier si l'utilisateur est connecté -->
+        {% if user.is_authenticated %}
+            <!-- Si l'utilisateur est connecté, afficher un bouton de déconnexion -->
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <!-- Si l'utilisateur n'est pas connecté, afficher un lien vers la page de connexion -->
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
     </div>
 
     <!-- Liste des articles -->
@@ -141,6 +148,7 @@
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
+            <p>Publié le {{ post.created_at|date:"d M Y" }}</p>
             
             <!-- Afficher les boutons de modification et suppression seulement si l'utilisateur est l'auteur -->
             {% if post.author == user %}
