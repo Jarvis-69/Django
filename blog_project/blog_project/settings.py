@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',  # Notre application blog
+    'rosetta',  # Application pour la traduction
 ]
  
 # Middleware
