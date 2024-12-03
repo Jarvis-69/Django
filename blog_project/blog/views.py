@@ -6,7 +6,6 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
 
 def post_list(request):
     # Récupérer tous les posts, en filtrant pour ceux qui sont publiés
@@ -30,9 +29,9 @@ def create_post(request):
     
     return render(request, 'blog/create_post.html', {'form': form})
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.exceptions import PermissionDenied
-from .models import Post
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'post_detail.html', {'post': post})
 
 def edit_post(request, pk):
     # Récupérer le post avec le pk passé dans l'URL

@@ -14,6 +14,10 @@
             /* color: #333; */
         }
 
+        * {
+            text-decoration: none;
+        }
+
         /* Barre de navigation */
         .navbar {
             background-color: #3498db;
@@ -188,28 +192,20 @@
 
     <h1 style="text-align: center;">Bonjour, {{ user.username }}</h1>  <!-- Affichage du nom de l'utilisateur -->
 
-    {% load custom_filters %}
-
     <!-- Affichage de la liste des publications -->
     <ul>
         {% for post in posts %}
+        <a href="{% url 'post_detail' post.id %}">
         <div class="post">
             <h2>{{ post.title }}</h2>
             <p>{{ post.content }}</p>
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
-            <p><strong>Auteur:</strong> {{ post.author.username }}</p>
+            <p class="date">De : {{ post.author.username }}</p>
             <p class="date">Publié le {{ post.created_at|date:"d M Y, à H:m" }}</p>
-            
-            <!-- Boutons de modification et suppression -->
-            {% if user|is_admin or user == post.author %}
-                <div class="action-buttons">
-                    <a href="{% url 'edit_post' post.id %}" class="btn btn-edit">Modifier</a>
-                    <a href="{% url 'delete_post' post.id %}" class="btn btn-delete">Supprimer</a>
-                </div>
-            {% endif %}
         </div>
+        </a>
         {% endfor %}
     </ul>
 </body>

@@ -15,6 +15,7 @@ urlpatterns = [
     path('modify/<int:pk>/', views.edit_post, name='edit_post'),
     path('delete/<int:pk>/', views.delete_post, name='delete_post'),
     path('login/', auth_views.LoginView.as_view(next_page='post_list'), name='login'),
+    path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('logout/', views.logout_view, name='logout'),
     path('rosetta/', include(rosetta_urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
