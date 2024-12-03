@@ -28,7 +28,12 @@ class Post(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')    
-    image = models.ImageField(upload_to='blog_images/%Y/%m/%d/', blank=True)  
+    image = models.ImageField(upload_to='blog_images/%Y/%m/%d/', blank=True)
+
+    class Meta:
+        permissions = [
+            ("can_edit_all_posts", "Peut modifier toutes les publications"),
+        ]
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Si le slug n'est pas déjà défini

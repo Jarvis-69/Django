@@ -6,13 +6,15 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 def post_list(request):
     # Récupérer tous les posts, en filtrant pour ceux qui sont publiés
     posts = Post.objects.all().order_by('-created_at')
+    is_admin = request.user.groups.filter(name="Administrateurs").exists()
 
     # Retourner un rendu de la template 'post_list.html', en passant les posts
-    return render(request, 'blog/post_list.html', {'posts': posts, 'user': request.user})
+    return render(request, 'blog/post_list.html', {'posts': posts, 'user': request.user, 'is_admin': is_admin})
 
 @login_required  # Assure que l'utilisateur soit connecté avant de pouvoir créer un post
 def create_post(request):
@@ -28,11 +30,15 @@ def create_post(request):
     
     return render(request, 'blog/create_post.html', {'form': form})
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.exceptions import PermissionDenied
+from .models import Post
+
 def edit_post(request, pk):
     # Récupérer le post avec le pk passé dans l'URL
     post = get_object_or_404(Post, pk=pk)
-    
-    # Si la méthode est POST, on veut mettre à jour le post
+
+    # Si la requête est en POST, mettre à jour les informations du post
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():

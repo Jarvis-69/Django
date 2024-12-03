@@ -120,6 +120,43 @@
             background-color: #2980b9;
         }
 
+        a {
+            text-decoration: none;
+        }
+
+        /* Style général des boutons */
+        .action-buttons {
+            margin-top: 20px;
+        }
+
+        .action-buttons .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .action-buttons .btn-edit {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .action-buttons .btn-edit:hover {
+            background-color: #2980b9;
+        }
+
+        .action-buttons .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .action-buttons .btn-delete:hover {
+            background-color: #c0392b;
+        }
     </style>
 </head>
 <body>
@@ -136,25 +173,29 @@
 
     <H2 style="text-align: center;">Bonjour, {{ user.username }}</H2>  <!-- Affichage du nom de l'utilisateur -->
 
-    <!-- Liste des articles -->
+    {% load custom_filters %}
+
+    <!-- Affichage de la liste des publications -->
     <ul>
         {% for post in posts %}
         <div class="post">
             <h2>{{ post.title }}</h2>
             <p>{{ post.content }}</p>
-            <p><strong>Auteur:</strong> {{ post.author.username }}</p>  <!-- Affichage de l'auteur -->
+            <p><strong>Auteur:</strong> {{ post.author.username }}</p>
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
             <p>Publié le {{ post.created_at|date:"d M Y, à H:m" }}</p>
             
-            <!-- Afficher les boutons de modification et suppression seulement si l'utilisateur est l'auteur -->
-            {% if post.author == user %}
-                <a href="{% url 'edit_post' post.id %}">Edit</a>
-                <a href="{% url 'delete_post' post.id %}">Delete</a>
+            <!-- Boutons de modification et suppression -->
+            {% if user|is_admin or user == post.author %}
+                <div class="action-buttons">
+                    <a href="{% url 'edit_post' post.id %}" class="btn btn-edit">Modifier</a>
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce post ?')">Supprimer</a>
+                </div>
             {% endif %}
         </div>
-        {% endfor %}        
+        {% endfor %}
     </ul>    
 </body>
 </html>
