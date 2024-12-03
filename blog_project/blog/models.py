@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-# from django.urls import reverse
 from django.utils.text import slugify
 
 class Category(models.Model):
@@ -11,13 +10,12 @@ class Category(models.Model):
         return self.name
 
 class Post(models.Model):    
-    title = models.CharField(max_length=200)    
-    slug = models.SlugField(unique=True, blank=True)    
-    content = models.TextField()     
-    # updated_at = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True) 
+    content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')    
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')
     image = models.ImageField(upload_to='blog_images/%Y/%m/%d/', blank=True)
 
     class Meta:

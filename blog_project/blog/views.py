@@ -1,4 +1,3 @@
-# blog/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Category
 from .forms import PostForm
@@ -9,22 +8,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 def post_list(request):
-    # Récupérer tous les posts, en filtrant pour ceux qui sont publiés
     posts = Post.objects.all().order_by('-created_at')
     is_admin = request.user.groups.filter(name="Administrateurs").exists()
 
      # Filtrer par catégorie
-    category_filter = request.GET.get('category')  # Récupérer la catégorie depuis les paramètres GET
+    category_filter = request.GET.get('category')
     if category_filter:
         posts = posts.filter(category__name=category_filter)
 
     # Filtrer par utilisateur
-    user_filter = request.GET.get('user')  # Récupérer l'utilisateur depuis les paramètres GET
+    user_filter = request.GET.get('user')
     if user_filter:
         posts = posts.filter(author__username=user_filter)
 
-    categories = Category.objects.all()  # Récupérer toutes les catégories
-    users = User.objects.all()  # Récupérer tous les utilisateurs (ou personnaliser selon vos besoins)
+    categories = Category.objects.all()
+    users = User.objects.all()
 
     context = {
         'posts': posts,
@@ -42,10 +40,10 @@ def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)  # Ne pas sauvegarder immédiatement
-            post.author = request.user  # Associer l'utilisateur connecté comme auteur
-            post.save()  # Sauvegarder l'article
-            return redirect('post_list')  # Rediriger vers la liste des posts après la création
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('post_list')
     else:
         form = PostForm()
     

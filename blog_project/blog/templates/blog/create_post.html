@@ -156,13 +156,11 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-
             {% if form.errors %}
                 <div class="error">
                     <p>There were errors in your form. Please fix them and try again.</p>
                 </div>
             {% endif %}
-
             <button type="submit">Créer la publication</button>
         </form>
     </div>

@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',  # Notre application blog
-    'rosetta',  # Application pour la traduction
+    'modeltranslation',
 ]
  
 # Middleware
@@ -34,6 +34,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # Middleware pour la gestion des langues
 ]
  
 # Configuration des URLs
@@ -88,9 +89,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
- 
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),  # Chemin vers le dossier des traductions
+]
+
 # Internationalisation
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGES = [
+    ('en', 'English'),
+    ('fr', 'Français'),
+]
+
+LANGUAGE_CODE = 'fr'  # Par défaut, la langue de l'application sera le français
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True
