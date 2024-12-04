@@ -76,12 +76,36 @@
         .back-to-home:hover {
             text-decoration: underline;
         }
+
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
-
+    {% load i18n %}
     <div class="login-container">
-        <h1>Connexion</h1>
+        <h1>{% trans "Connexion" %}</h1>
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>    
         
         <!-- Afficher les messages d'erreur si nécessaire -->
         {% if messages %}
@@ -95,10 +119,10 @@
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}  <!-- Afficher le formulaire avec chaque champ sur une nouvelle ligne -->
-            <button type="submit">Connexion</button>
+            <button type="submit">{% trans "Connexion" %}</button>
         </form>
 
-        <a href="{% url 'post_list' %}" class="back-to-home">Retour à l'accueil</a>
+        <a href="{% url 'post_list' %}" class="back-to-home">{% trans "Retour à l'accueil" %}</a>
     </div>
 
 </body>

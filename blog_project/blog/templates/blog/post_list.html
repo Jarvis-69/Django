@@ -231,29 +231,53 @@
             width: auto;
             align-self: center;
         }
+
+        /* Style pour le sélecteur de langue */
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
-
-    <!-- Barre de navigation -->
+    {% load i18n %}
     <div class="navbar">
-        <h1 style="position: absolute; left: 50px;">Toutes les publications</h1>
-        <a href="{% url 'create_post' %}" class="create-post-btn">Créer une nouvelle publication</a>
+        <h1 style="position: absolute; left: 50px;">{% trans "Toutes les publications" %}</h1>
+        <a href="{% url 'create_post' %}" class="create-post-btn">{% trans "Créer une nouvelle publication" %}</a>
         <div class="auth-links" style="position: absolute; right: 50px;">
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">Déconnexion</a>  <!-- Lien de déconnexion -->
+                <a href="{% url 'logout' %}">{% trans "Déconnexion" %}</a>  <!-- Lien de déconnexion -->
             {% else %}
-                <a href="{% url 'login' %}">Connexion</a>  <!-- Lien de connexion -->
+                <a href="{% url 'login' %}">{% trans "Connexion" %}</a>  <!-- Lien de connexion -->
             {% endif %}
         </div>
-    </div>
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>
+    </div>   
 
-    <h1 style="text-align: center;">Bonjour, {{ user.username }}</h1>  <!-- Affichage du nom de l'utilisateur -->
+    <h1 style="text-align: center;">{% trans "Bonjour" %}, {{ user.username }}</h1>  <!-- Affichage du nom de l'utilisateur -->
 
     <form method="get">
-        <label for="category">Filtrer par catégorie :</label>
+        <label for="category">{% trans "Filtrer par catégorie" %} :</label>
         <select name="category" id="category">
-            <option value="">-- Toutes les catégories --</option>
+            <option value="">-- {% trans "Toutes les catégories" %} --</option>
             {% for category in categories %}
                 <option value="{{ category.name }}" {% if request.GET.category == category.name %}selected{% endif %}>
                     {{ category.name }}
@@ -261,9 +285,9 @@
             {% endfor %}
         </select>
     
-        <label for="user">Filtrer par utilisateur :</label>
+        <label for="user">{% trans "Filtrer par utilisateur" %} :</label>
         <select name="user" id="user">
-            <option value="">-- Tous les utilisateurs --</option>
+            <option value="">-- {% trans "Tous les utilisateurs" %} --</option>
             {% for user in users %}
                 <option value="{{ user.username }}" {% if request.GET.user == user.username %}selected{% endif %}>
                     {{ user.username }}
@@ -271,7 +295,7 @@
             {% endfor %}
         </select>
     
-        <button type="submit">Filtrer</button>
+        <button type="submit">{% trans "Filtrer" %}</button>
     </form>
 
     <!-- Affichage de la liste des publications -->
@@ -284,8 +308,8 @@
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}">
             {% endif %}
-            <p class="date">De : {{ post.author.username }}</p>
-            <p class="date">Publié le {{ post.created_at|date:"d M Y, à H:m" }}</p>
+            <p class="date">{% trans "De" %} : {{ post.author.username }}</p>
+            <p class="date">{% trans "Publié le" %} {{ post.created_at|date:"d M Y, à H:m" }}</p>
         </div>
         </a>
         {% endfor %}

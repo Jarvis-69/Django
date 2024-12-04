@@ -6,6 +6,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.utils.translation import gettext as _
+from django.conf import settings
+from django.utils.translation import activate
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -99,4 +102,45 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('post_list')
+
+from django.utils.translation import activate
+from django.shortcuts import redirect
+from django.conf import settings
+
+from django.utils.translation import activate
+from django.shortcuts import redirect
+from django.conf import settings
+from urllib.parse import urlparse, urlunparse
+
+from django.utils.translation import activate
+from django.shortcuts import redirect
+from django.conf import settings
+from urllib.parse import urlparse, urlunparse
+
+def set_language(request):
+    language = request.GET.get('language')  # Récupérer la langue de la query string
+    if language:
+        activate(language)  # Activer la langue
+        request.session[settings.LANGUAGE_SESSION_KEY] = language  # Stocker la langue dans la session
+
+    # Récupérer l'URL de la page précédente
+    referer = request.META.get('HTTP_REFERER', '/')
+    
+    # Parser l'URL de référence pour en extraire la partie path
+    parsed_url = urlparse(referer)
+    path = parsed_url.path
+
+    # Vérifier et nettoyer la langue déjà présente dans le chemin (si elle existe)
+    if path.startswith('/fr/'):
+        path = path[3:]  # Retirer '/fr/' du début du path
+    elif path.startswith('/en/'):
+        path = path[3:]  # Retirer '/en/' du début du path
+
+    # Ajouter la nouvelle langue au début du path
+    path = f'/{language}{path}'
+
+    # Reconstruire l'URL avec le path modifié (en excluant la partie domaine)
+    redirect_url = urlunparse(parsed_url._replace(path=path))
+
+    return redirect(redirect_url)  # Rediriger vers l'URL avec la langue appropriée
 

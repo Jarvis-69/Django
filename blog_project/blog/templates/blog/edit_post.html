@@ -138,19 +138,43 @@
         .navbar .auth-links a:hover {
             background-color: #27ae60;
         }
+
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <h1 style="position: absolute; left: 50px;">Modification de publication</h1>
-        <a href="{% url 'post_list' %}">Accueil</a>
+        <h1 style="position: absolute; left: 50px;">{% trans "Modification de publication" %}</h1>
+        <a href="{% url 'post_list' %}">{% trans "Accueil" %}</a>
         <div class="auth-links" style="position: absolute; right: 50px;">       
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">Déconnexion</a>
+                <a href="{% url 'logout' %}">{% trans "Déconnexion" %}</a>
             {% else %}
-                <a href="{% url 'login' %}">Connexion</a>
+                <a href="{% url 'login' %}">{% trans "Connexion" %}</a>
             {% endif %}
         </div>
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>     
     </div>
 
     <!-- Formulaire de modification d'article -->
@@ -164,12 +188,12 @@
             <!-- Ajouter un message d'erreur si nécessaire -->
             {% if form.errors %}
                 <div class="error">
-                    <p>Il y a des erreurs dans votre formulaire. Veuillez les corriger et réessayer.</p>
+                    <p>{% trans "Il y a des erreurs dans votre formulaire. Veuillez les corriger et réessayer" %}.</p>
                 </div>
             {% endif %}
 
             <!-- Bouton pour soumettre -->
-            <button type="submit">Sauvegarder les modifications</button>
+            <button type="submit">{% trans "Sauvegarder les modifications" %}</button>
         </form>
     </div>
 

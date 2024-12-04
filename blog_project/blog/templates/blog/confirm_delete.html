@@ -105,21 +105,49 @@
         .back-button:hover {
             background-color: #2980b9;
         }
+
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
-    <h1 style="color: white;">Es-tu sûr de vouloir supprimer cette publication ?</h1>
+    {% load i18n %}
+    <h1 style="color: white;">{% trans "Es-tu sûr de vouloir supprimer cette publication" %} ?</h1>
+    <form method="get" action="{% url 'set_language' %}" style="position: absolute; right: 200px;">
+        {% csrf_token %}
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>
+    </form>        
 
     <div class="confirm-container">
         <div class="post-details">
-            <p><strong>Titre :</strong> {{ post.title }}</p>
-            <p><strong>Contenu :</strong> {{ post.content }}</p>
+            <p><strong>{% trans "Titre" %} :</strong>{{ post.title }}</p>
+            <p><strong>{% trans "Contenu" %} :</strong> {{ post.content }}</p>
         </div>
 
         <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="delete-btn">Supprimer</button>
-            <a href="{% url 'post_list' %}" class="back-button">Annuler</a>
+            <button type="submit" class="delete-btn">{% trans "Supprimer" %}</button>
+            <a href="{% url 'post_list' %}" class="back-button">{% trans "Annuler" %}</a>
         </form>
     </div>
 

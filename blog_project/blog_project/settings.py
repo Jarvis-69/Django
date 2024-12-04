@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
  
 # Chargement des variables d'environnement depuis .env
 load_dotenv()
@@ -34,7 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',  # Middleware pour la gestion des langues
+    'django.middleware.locale.LocaleMiddleware',
 ]
  
 # Configuration des URLs
@@ -96,9 +97,12 @@ LOCALE_PATHS = [
 
 # Internationalisation
 LANGUAGES = [
-    ('en', 'English'),
-    ('fr', 'Français'),
+    ('fr', _('French')),
+    ('en', _('English')),
+    # autres langues possibles
 ]
+
+LANGUAGE_SESSION_KEY = 'django_language'  # La clé par défaut pour stocker la langue dans la session
 
 LANGUAGE_CODE = 'fr'  # Par défaut, la langue de l'application sera le français
 TIME_ZONE = 'Europe/Paris'
