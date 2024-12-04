@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.utils.translation import activate
+from urllib.parse import urlparse, urlunparse
+import logging
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -103,20 +105,6 @@ def logout_view(request):
     logout(request)
     return redirect('post_list')
 
-from django.utils.translation import activate
-from django.shortcuts import redirect
-from django.conf import settings
-
-from django.utils.translation import activate
-from django.shortcuts import redirect
-from django.conf import settings
-from urllib.parse import urlparse, urlunparse
-
-from django.utils.translation import activate
-from django.shortcuts import redirect
-from django.conf import settings
-from urllib.parse import urlparse, urlunparse
-
 def set_language(request):
     language = request.GET.get('language')  # Récupérer la langue de la query string
     if language:
@@ -143,4 +131,8 @@ def set_language(request):
     redirect_url = urlunparse(parsed_url._replace(path=path))
 
     return redirect(redirect_url)  # Rediriger vers l'URL avec la langue appropriée
+
+# Obtenir le logger
+logger = logging.getLogger(__name__)
+
 

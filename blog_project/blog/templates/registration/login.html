@@ -79,7 +79,8 @@
 
         .form_language {
             position: absolute;
-            right: 200px;
+            right: 50px;
+            top: 20px;
             padding: 0;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -98,7 +99,6 @@
 <body>
     {% load i18n %}
     <div class="login-container">
-        <h1>{% trans "Connexion" %}</h1>
         <form method="get" action="{% url 'set_language' %}" class="form_language">
             {% csrf_token %}
             <select name="language" onchange="this.form.submit()" class="language_option">
@@ -106,6 +106,8 @@
                 <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
             </select>
         </form>    
+        <h1>{% trans "Connexion" %}</h1>
+
         
         <!-- Afficher les messages d'erreur si nécessaire -->
         {% if messages %}
