@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modification de publication</title>
+    <style>
+        /* Style général de la page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barre de navigation */
+        .navbar {
+            background-color: #3498db;
+            padding: 20px 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar h1 {
+            font-size: 28px;
+            /* margin: 0; */
+            /* font-weight: normal; */
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #2980b9;
+        }
+
+        .navbar .auth-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Conteneur principal du formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style des champs du formulaire */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form input, form textarea, form button {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box; /* Ajout de box-sizing pour éviter les dépassements */
+        }
+
+        /* Style spécifique pour les textarea */
+        form textarea {
+            height: 200px;
+            resize: vertical;
+        }
+
+        /* Bouton de soumission */
+        form button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Style des champs avec erreurs */
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: -10px;
+        }
+
+        /* Style du bouton de retour */
+        .back-button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Enlever le texte souligné sur les liens */
+        a {
+            text-decoration: none; /* Enlève le soulignement */
+        }
+
+        /* Style pour le bouton de connexion/déconnexion */
+        .navbar .auth-links a {
+            font-size: 16px;
+            background-color: #2ecc71;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .auth-links a:hover {
+            background-color: #27ae60;
+        }
+
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    {% load i18n %}
+    <div class="navbar">
+        <h1 style="position: absolute; left: 50px;">{% trans "Modification de publication" %}</h1>
+        <a href="{% url 'post_list' %}">{% trans "Accueil" %}</a>
+        <div class="auth-links" style="position: absolute; right: 50px;">       
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">{% trans "Déconnexion" %}</a>
+            {% else %}
+                <a href="{% url 'login' %}">{% trans "Connexion" %}</a>
+            {% endif %}
+        </div>
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>     
+    </div>
+
+    <!-- Formulaire de modification d'article -->
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Affiche le formulaire de modification -->
+            {{ form.as_p }}
+
+            <!-- Ajouter un message d'erreur si nécessaire -->
+            {% if form.errors %}
+                <div class="error">
+                    <p>{% trans "Il y a des erreurs dans votre formulaire. Veuillez les corriger et réessayer" %}.</p>
+                </div>
+            {% endif %}
+
+            <!-- Bouton pour soumettre -->
+            <button type="submit">{% trans "Sauvegarder les modifications" %}</button>
+        </form>
+    </div>
+
+</body>
+</html>

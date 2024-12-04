@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Publications</title>
+    <style>
+        /* Style général de la page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            /* color: #333; */
+        }
+
+        * {
+            text-decoration: none;
+        }
+
+        /* Barre de navigation */
+        .navbar {
+            background-color: #3498db;
+            /* padding: 20px 50px; */
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #2980b9;
+        }
+
+        .navbar h1 {
+            font-size: 28px;
+        }
+
+        /* Titre de la page */
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        /* Conteneur des posts */
+        .post {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover effect sur chaque post */
+        .post:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .post h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .post p {
+            font-size: 16px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Image dans chaque post */
+        .post img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        /* Date de publication */
+        .post .date {
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        /* Liste des articles */
+        ul {
+            padding: 0;
+            list-style-type: none;
+            margin: 0;
+        }
+
+        /* Style du bouton pour créer un nouvel article */
+        .create-post-btn {
+            display: block;
+            width: 300px;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin: 20px auto;
+        }
+
+        .create-post-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Style des boutons de modification et suppression */
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-buttons .btn {
+            padding: 8px 16px; /* Boutons plus petits */
+            font-size: 14px;  /* Taille de police réduite */
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .action-buttons .btn-edit {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .action-buttons .btn-edit:hover {
+            background-color: #2980b9;
+        }
+
+        .action-buttons .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .action-buttons .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        /* Style pour le bouton de connexion/déconnexion */
+        .navbar .auth-links a {
+            font-size: 16px;
+            background-color: #2ecc71;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .auth-links a:hover {
+            background-color: #27ae60;
+        }
+
+        /* Style pour les filtres */
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form label {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        form select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        form select:focus {
+            border-color: #3498db;
+            background-color: #eaf3fc;
+        }
+
+        form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Aligner les filtres à gauche */
+        form label, form select {
+            width: 100%;
+        }
+
+        /* Espacement entre les éléments du formulaire */
+        form button {
+            width: auto;
+            align-self: center;
+        }
+
+        /* Style pour le sélecteur de langue */
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    {% load i18n %}
+    <div class="navbar">
+        <h1 style="position: absolute; left: 50px;">{% trans "Toutes les publications" %}</h1>
+        <a href="{% url 'create_post' %}" class="create-post-btn">{% trans "Créer une nouvelle publication" %}</a>
+        <div class="auth-links" style="position: absolute; right: 50px;">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">{% trans "Déconnexion" %}</a>  <!-- Lien de déconnexion -->
+            {% else %}
+                <a href="{% url 'login' %}">{% trans "Connexion" %}</a>  <!-- Lien de connexion -->
+            {% endif %}
+        </div>
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>
+    </div>   
+
+    <h1 style="text-align: center;">{% trans "Bonjour" %}, {{ user.username }}</h1>  <!-- Affichage du nom de l'utilisateur -->
+
+    <form method="get">
+        <label for="category">{% trans "Filtrer par catégorie" %} :</label>
+        <select name="category" id="category">
+            <option value="">-- {% trans "Toutes les catégories" %} --</option>
+            {% for category in categories %}
+                <option value="{{ category.name }}" {% if request.GET.category == category.name %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <label for="user">{% trans "Filtrer par utilisateur" %} :</label>
+        <select name="user" id="user">
+            <option value="">-- {% trans "Tous les utilisateurs" %} --</option>
+            {% for user in users %}
+                <option value="{{ user.username }}" {% if request.GET.user == user.username %}selected{% endif %}>
+                    {{ user.username }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <button type="submit">{% trans "Filtrer" %}</button>
+    </form>
+
+    <!-- Affichage de la liste des publications -->
+    <ul>
+        {% for post in posts %}
+        <a href="{% url 'post_detail' post.id %}">
+        <div class="post">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+            <p class="date">{% trans "De" %} : {{ post.author.username }}</p>
+            <p class="date">{% trans "Publié le" %} {{ post.created_at|date:"d M Y, à H:m" }}</p>
+        </div>
+        </a>
+        {% endfor %}
+    </ul>
+</body>
+</html>

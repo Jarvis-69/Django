@@ -11,3 +11,10 @@ pip install psycopg2-binary python-dotenv
 django-admin startproject monprojet
 python manage.py makemigrations
 pip install psycopg2
+pip install django-environ
+
+# Pour développement
+DJANGO_ENV=development python manage.py runserver
+
+# Pour production
+DJANGO_ENV=production python manage.py runserver

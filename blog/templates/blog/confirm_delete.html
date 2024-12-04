@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Deletion</title>
+    <style>
+        /* Style général de la page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px 0;
+            background-color: #3498db;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Image */
+        .confirmation-image {
+            display: block;
+            max-width: 150px;
+            margin: 30px auto;
+            border-radius: 50%;
+        }
+
+        .confirm-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .confirm-container p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .confirm-container .post-details {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .confirm-container .post-details p {
+            margin: 10px 0;
+        }
+
+        .confirm-container button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-container button:hover {
+            transform: scale(1.05);
+        }
+
+        .confirm-container .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .confirm-container .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .confirm-container .cancel-btn {
+            background-color: #95a5a6;
+            color: white;
+            margin-left: 15px;
+        }
+
+        .confirm-container .cancel-btn:hover {
+            background-color: #7f8c8d;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .form_language {
+            position: absolute;
+            right: 200px;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .language_option {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    {% load i18n %}
+    <h1 style="color: white;">{% trans "Es-tu sûr de vouloir supprimer cette publication" %} ?</h1>
+    <form method="get" action="{% url 'set_language' %}" style="position: absolute; right: 200px;">
+        {% csrf_token %}
+        <form method="get" action="{% url 'set_language' %}" class="form_language">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="language_option">
+                <option value="fr" {% if request.session.django_language == 'fr' %}selected{% endif %}>Français</option>
+                <option value="en" {% if request.session.django_language == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </form>
+    </form>        
+
+    <div class="confirm-container">
+        <div class="post-details">
+            <p><strong>{% trans "Titre" %} :</strong>{{ post.title }}</p>
+            <p><strong>{% trans "Contenu" %} :</strong> {{ post.content }}</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="delete-btn">{% trans "Supprimer" %}</button>
+            <a href="{% url 'post_list' %}" class="back-button">{% trans "Annuler" %}</a>
+        </form>
+    </div>
+
+</body>
+</html>
